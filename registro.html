@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISW-306 | Registro de Participante</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo-mark">ISW</span>
+        <span class="logo-sep">·</span>
+        <span class="logo-sub">306</span>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html" class="nav-link">Dashboard</a></li>
+          <li><a href="registro.html" class="nav-link active" aria-current="page">Registro</a></li>
+          <li><a href="index.html#etapas" class="nav-link">Etapas</a></li>
+          <li><a href="index.html#recursos" class="nav-link">Recursos</a></li>
+        </ul>
+      </nav>
+
+      <button class="hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Menú móvil">
+      <ul>
+        <li><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li><a href="registro.html" class="nav-link active">Registro</a></li>
+        <li><a href="index.html#etapas" class="nav-link">Etapas</a></li>
+        <li><a href="index.html#recursos" class="nav-link">Recursos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main>
+
+    <section class="registro-section" aria-labelledby="registro-title">
+      <div class="container registro-inner">
+
+        <!-- Columna informativa -->
+        <aside class="registro-info" aria-label="Información del registro">
+          <p class="hero-badge">Etapa 1 · Maquetación</p>
+          <h1 id="registro-title">Registro de<br /><em>Participante</em></h1>
+          <p>Completa el formulario para inscribir tus datos en el proyecto. La información será utilizada para el seguimiento académico durante el trimestre.</p>
+
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-icon" aria-hidden="true">◈</span>
+              <div>
+                <strong>Datos personales</strong>
+                <p>Nombre completo, correo institucional y número de matrícula.</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon" aria-hidden="true">◈</span>
+              <div>
+                <strong>Datos del proyecto</strong>
+                <p>Nombre de tu repositorio Git y URL del mismo.</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon" aria-hidden="true">◈</span>
+              <div>
+                <strong>Confirmación</strong>
+                <p>Recibirás confirmación una vez el profesor revise tu Pull Request.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Formulario de registro -->
+        <section class="registro-form-wrap" aria-label="Formulario de registro">
+          <form class="registro-form" id="registro-form" novalidate>
+            <h2 class="form-title">Datos del participante</h2>
+
+            <fieldset class="form-group-set">
+              <legend>Información personal</legend>
+
+              <div class="form-row form-row--two">
+                <div class="form-group">
+                  <label for="nombre">Nombre <span class="required" aria-hidden="true">*</span></label>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Ej. María"
+                    autocomplete="given-name"
+                    required
+                    aria-required="true"
+                  />
+                  <span class="form-error" id="nombre-error" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="apellido">Apellido <span class="required" aria-hidden="true">*</span></label>
+                  <input
+                    type="text"
+                    id="apellido"
+                    name="apellido"
+                    placeholder="Ej. González"
+                    autocomplete="family-name"
+                    required
+                    aria-required="true"
+                  />
+                  <span class="form-error" id="apellido-error" role="alert" aria-live="polite"></span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="matricula">Número de matrícula <span class="required" aria-hidden="true">*</span></label>
+                <input
+                  type="text"
+                  id="matricula"
+                  name="matricula"
+                  placeholder="Ej. 2023-0001"
+                  required
+                  aria-required="true"
+                  pattern="^\d{4}-\d{4}$"
+                  aria-describedby="matricula-hint matricula-error"
+                />
+                <span class="form-hint" id="matricula-hint">Formato: AAAA-NNNN</span>
+                <span class="form-error" id="matricula-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="correo">Correo institucional <span class="required" aria-hidden="true">*</span></label>
+                <input
+                  type="email"
+                  id="correo"
+                  name="correo"
+                  placeholder="usuario@institucion.edu"
+                  autocomplete="email"
+                  required
+                  aria-required="true"
+                  aria-describedby="correo-error"
+                />
+                <span class="form-error" id="correo-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row form-row--two">
+                <div class="form-group">
+                  <label for="seccion">Sección <span class="required" aria-hidden="true">*</span></label>
+                  <select id="seccion" name="seccion" required aria-required="true" aria-describedby="seccion-error">
+                    <option value="" disabled selected>Selecciona…</option>
+                    <option value="01">Sección 01</option>
+                    <option value="02">Sección 02</option>
+                    <option value="03">Sección 03</option>
+                    <option value="04">Sección 04</option>
+                  </select>
+                  <span class="form-error" id="seccion-error" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="periodo">Período académico <span class="required" aria-hidden="true">*</span></label>
+                  <select id="periodo" name="periodo" required aria-required="true">
+                    <option value="" disabled selected>Selecciona…</option>
+                    <option value="2025-1">2025 — Trimestre I</option>
+                    <option value="2025-2">2025 — Trimestre II</option>
+                    <option value="2025-3">2025 — Trimestre III</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group-set">
+              <legend>Datos del repositorio Git</legend>
+
+              <div class="form-group">
+                <label for="repo-nombre">Nombre del repositorio <span class="required" aria-hidden="true">*</span></label>
+                <input
+                  type="text"
+                  id="repo-nombre"
+                  name="repo-nombre"
+                  placeholder="Ej. isw306-proyecto"
+                  required
+                  aria-required="true"
+                  aria-describedby="repo-nombre-hint repo-nombre-error"
+                />
+                <span class="form-hint" id="repo-nombre-hint">Solo letras minúsculas, números y guiones.</span>
+                <span class="form-error" id="repo-nombre-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="repo-url">URL del repositorio <span class="required" aria-hidden="true">*</span></label>
+                <input
+                  type="url"
+                  id="repo-url"
+                  name="repo-url"
+                  placeholder="https://github.com/usuario/isw306-proyecto"
+                  required
+                  aria-required="true"
+                  aria-describedby="repo-url-error"
+                />
+                <span class="form-error" id="repo-url-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="plataforma">Plataforma</label>
+                <div class="radio-group" role="group" aria-labelledby="plataforma-label">
+                  <span id="plataforma-label" class="sr-only">Selecciona la plataforma</span>
+                  <label class="radio-label">
+                    <input type="radio" name="plataforma" value="github" checked /> GitHub
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="plataforma" value="gitlab" /> GitLab
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="plataforma" value="otro" /> Otro
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="privacidad">Visibilidad del repositorio</label>
+                <div class="toggle-group">
+                  <label class="toggle-label">
+                    <input type="checkbox" id="privacidad" name="privacidad" />
+                    <span class="toggle-track" aria-hidden="true"></span>
+                    Repositorio privado
+                  </label>
+                  <p class="form-hint">Si es privado, recuerda agregar al profesor como colaborador con rol <em>Viewer</em>.</p>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group-set">
+              <legend>Confirmación</legend>
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="acepta-terminos" id="acepta-terminos" required aria-required="true" aria-describedby="terminos-error" />
+                  Confirmo que el código es de mi autoría, cumple los requisitos de la Etapa 1 y tiene al menos 3 commits en la rama <code>etapa-1/maquetacion</code>.
+                </label>
+                <span class="form-error" id="terminos-error" role="alert" aria-live="polite"></span>
+              </div>
+            </fieldset>
+
+            <div class="form-actions">
+              <button type="reset" class="btn btn-ghost">Limpiar</button>
+              <button type="submit" class="btn btn-primary">Enviar registro</button>
+            </div>
+
+            <!-- Mensaje de éxito -->
+            <div class="form-success" id="form-success" role="status" aria-live="polite" hidden>
+              <span class="success-icon" aria-hidden="true">✓</span>
+              <div>
+                <strong>¡Registro enviado!</strong>
+                <p>Tus datos han sido guardados correctamente. Revisa tu correo institucional para la confirmación.</p>
+              </div>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">ISW-306 · Proyecto Integrador &mdash; Desarrollo de Aplicación Web Profesional</p>
+      <p class="footer-note">Cada etapa se entrega de forma acumulativa en su propia rama Git.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
