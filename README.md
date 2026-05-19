@@ -76,7 +76,7 @@ main                        ← Código estable y aprobado
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/TU_USUARIO/isw306-proyecto.git
+git clone https://github.com/notorious813/isw306-proyecto
 cd isw306-proyecto
 
 # 2. Asegurarse de estar en main
@@ -126,4 +126,4 @@ tipo: descripción breve en presente
 - **Nombre:** *(completar)*
 - **Matrícula:** *(completar)*
 - **Sección:** *(completar)*
-- **Repositorio:** *(completar URL)*
+- **Repositorio:** *https://github.com/notorious813/isw306-proyecto*
