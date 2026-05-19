@@ -123,7 +123,7 @@ tipo: descripción breve en presente
 
 ## 👤 Autor
 
-- **Nombre:** *(completar)*
-- **Matrícula:** *(completar)*
-- **Sección:** *(completar)*
+- **Nombre:** *Cristopher Diaz Tejada*
+- **Matrícula:** *100073686*
+- **Sección:** *ISW-306*
 - **Repositorio:** *https://github.com/notorious813/isw306-proyecto*
