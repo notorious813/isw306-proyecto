@@ -190,6 +190,8 @@ const repoUrl = document.getElementById("repo-url");
 const terminos = document.getElementById("acepta-terminos");
 const mensajeExito = document.getElementById("form-success");
 
+const botonEnviar = document.querySelector("#registro-form button");
+
 // Validaciones en tiempo real
 nombre.addEventListener("input", () => {
     validarLongitud(nombre, "nombre-error", 3);
