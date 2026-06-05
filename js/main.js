@@ -202,6 +202,19 @@ apellido.addEventListener("input", () => {
 correo.addEventListener("input", validarCorreo);
 
 matricula.addEventListener("input", validarMatricula);
+repoNombre.addEventListener("input", validarRepositorio);
+
+function validarRepositorio() {
+    const error = document.getElementById("repo-nombre-error");
+
+    if (repoNombre.value.trim().length < 3) {
+        error.innerHTML = "El repositorio debe tener al menos 3 caracteres";
+        return false;
+    }
+
+    error.innerHTML = "";
+    return true;
+}
 
 // Función para longitud mínima
 function validarLongitud(campo, errorId, minimo) {
