@@ -314,3 +314,19 @@ formulario.addEventListener("submit", function (e) {
 
     formulario.reset();
 });
+
+window.addEventListener("load", () => {
+
+    const datosGuardados =
+        JSON.parse(localStorage.getItem("participante"));
+
+    if (datosGuardados) {
+
+        nombre.value = datosGuardados.nombre || "";
+        apellido.value = datosGuardados.apellido || "";
+        matricula.value = datosGuardados.matricula || "";
+        correo.value = datosGuardados.correo || "";
+        repoNombre.value = datosGuardados.repositorio || "";
+        repoUrl.value = datosGuardados.url || "";
+    }
+});
