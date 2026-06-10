@@ -187,6 +187,8 @@ const correo = document.getElementById("correo");
 const seccion = document.getElementById("seccion");
 const repoNombre = document.getElementById("repo-nombre");
 const repoUrl = document.getElementById("repo-url");
+const periodo = document.getElementById('periodo');
+const privacidad = document.getElementById('privacidad');
 const terminos = document.getElementById("acepta-terminos");
 const mensajeExito = document.getElementById("form-success");
 
@@ -296,16 +298,20 @@ formulario.addEventListener("submit", function (e) {
 
     if (!valido) return;
 
-    // Guardar en LocalStorage
-    const participante = {
-        nombre: nombre.value,
-        apellido: apellido.value,
-        matricula: matricula.value,
-        correo: correo.value,
-        seccion: seccion.value,
-        repositorio: repoNombre.value,
-        url: repoUrl.value
-    };
+  const participante = {
+  nombre: document.getElementById('nombre').value,
+  apellido: document.getElementById('apellido').value,
+  matricula: document.getElementById('matricula').value,
+  correo: document.getElementById('correo').value,
+  seccion: seccion.value,
+  periodo: periodo.value,
+  repositorio: repoNombre.value,
+  url: repoUrl.value,
+  plataforma: document.querySelector(
+    'input[name="plataforma"]:checked'
+  )?.value || '',
+  privacidad: privacidad.checked
+};
 
     localStorage.setItem(
         "participante",
@@ -332,3 +338,18 @@ window.addEventListener("load", () => {
         repoUrl.value = datosGuardados.url || "";
     }
 });
+
+if (periodo)
+  periodo.value = datosGuardados.periodo || '';
+
+const plataformaSeleccionada =
+  document.querySelector(
+    `input[name="plataforma"][value="${datosGuardados.plataforma}"]`
+  );
+
+if (plataformaSeleccionada)
+  plataformaSeleccionada.checked = true;
+
+if (privacidad)
+  privacidad.checked =
+    datosGuardados.privacidad || false;
