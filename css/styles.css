@@ -756,3 +756,12 @@ select {
     grid-template-columns: 1fr 380px;
   }
 }
+
+.error {
+    border: 2px solid red;
+}
+
+.form-error {
+    color: red;
+    font-size: 14px;
+}

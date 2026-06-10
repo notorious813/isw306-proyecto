@@ -177,3 +177,179 @@
     }
   });
 })();
+
+// Obtener elementos
+const formulario = document.getElementById("registro-form");
+const nombre = document.getElementById("nombre");
+const apellido = document.getElementById("apellido");
+const matricula = document.getElementById("matricula");
+const correo = document.getElementById("correo");
+const seccion = document.getElementById("seccion");
+const repoNombre = document.getElementById("repo-nombre");
+const repoUrl = document.getElementById("repo-url");
+const periodo = document.getElementById('periodo');
+const privacidad = document.getElementById('privacidad');
+const terminos = document.getElementById("acepta-terminos");
+const mensajeExito = document.getElementById("form-success");
+
+const botonEnviar = document.querySelector("#registro-form button");
+
+// Validaciones en tiempo real
+nombre.addEventListener("input", () => {
+    validarLongitud(nombre, "nombre-error", 3);
+});
+
+apellido.addEventListener("input", () => {
+    validarLongitud(apellido, "apellido-error", 3);
+});
+
+correo.addEventListener("input", validarCorreo);
+
+matricula.addEventListener("input", validarMatricula);
+repoNombre.addEventListener("input", validarRepositorio);
+
+function validarRepositorio() {
+    const error = document.getElementById("repo-nombre-error");
+
+    if (repoNombre.value.trim().length < 3) {
+        error.innerHTML = "El repositorio debe tener al menos 3 caracteres";
+        return false;
+    }
+
+    error.innerHTML = "";
+    return true;
+}
+
+// Función para longitud mínima
+function validarLongitud(campo, errorId, minimo) {
+    const error = document.getElementById(errorId);
+
+    if (campo.value.trim().length < minimo) {
+        error.innerHTML = `Debe tener al menos ${minimo} caracteres`;
+        campo.classList.add("error");
+        return false;
+    }
+
+    error.innerHTML = "";
+    campo.classList.remove("error");
+    return true;
+}
+
+// Validar correo
+function validarCorreo() {
+    const error = document.getElementById("correo-error");
+
+    const expresion = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!expresion.test(correo.value)) {
+        error.innerHTML = "Correo inválido";
+        return false;
+    }
+
+    error.innerHTML = "";
+    return true;
+}
+
+// Validar matrícula
+function validarMatricula() {
+    const error = document.getElementById("matricula-error");
+
+    const patron = /^\d{4}-\d{4}$/;
+
+    if (!patron.test(matricula.value)) {
+        error.innerHTML = "Formato correcto: AAAA-NNNN";
+        return false;
+    }
+
+    error.innerHTML = "";
+    return true;
+}
+
+// Enviar formulario
+formulario.addEventListener("submit", function (e) {
+
+    e.preventDefault();
+
+    let valido = true;
+
+    if (!validarLongitud(nombre, "nombre-error", 3))
+        valido = false;
+
+    if (!validarLongitud(apellido, "apellido-error", 3))
+        valido = false;
+
+    if (!validarCorreo())
+        valido = false;
+
+    if (!validarMatricula())
+        valido = false;
+
+    if (seccion.value === "") {
+        document.getElementById("seccion-error").innerHTML =
+            "Seleccione una sección";
+        valido = false;
+    }
+
+    if (!terminos.checked) {
+        document.getElementById("terminos-error").innerHTML =
+            "Debe aceptar los términos";
+        valido = false;
+    }
+
+    if (!valido) return;
+
+  const participante = {
+  nombre: document.getElementById('nombre').value,
+  apellido: document.getElementById('apellido').value,
+  matricula: document.getElementById('matricula').value,
+  correo: document.getElementById('correo').value,
+  seccion: seccion.value,
+  periodo: periodo.value,
+  repositorio: repoNombre.value,
+  url: repoUrl.value,
+  plataforma: document.querySelector(
+    'input[name="plataforma"]:checked'
+  )?.value || '',
+  privacidad: privacidad.checked
+};
+
+    localStorage.setItem(
+        "participante",
+        JSON.stringify(participante)
+    );
+
+    mensajeExito.hidden = false;
+
+    formulario.reset();
+});
+
+window.addEventListener("load", () => {
+
+    const datosGuardados =
+        JSON.parse(localStorage.getItem("participante"));
+
+    if (datosGuardados) {
+
+        nombre.value = datosGuardados.nombre || "";
+        apellido.value = datosGuardados.apellido || "";
+        matricula.value = datosGuardados.matricula || "";
+        correo.value = datosGuardados.correo || "";
+        repoNombre.value = datosGuardados.repositorio || "";
+        repoUrl.value = datosGuardados.url || "";
+    }
+});
+
+if (periodo)
+  periodo.value = datosGuardados.periodo || '';
+
+const plataformaSeleccionada =
+  document.querySelector(
+    `input[name="plataforma"][value="${datosGuardados.plataforma}"]`
+  );
+
+if (plataformaSeleccionada)
+  plataformaSeleccionada.checked = true;
+
+if (privacidad)
+  privacidad.checked =
+    datosGuardados.privacidad || false;
