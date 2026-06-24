@@ -127,3 +127,122 @@ tipo: descripción breve en presente
 - **Matrícula:** *100073686*
 - **Sección:** *ISW-306*
 - **Repositorio:** *https://github.com/notorious813/isw306-proyecto*
+
+-------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------
+
+# Etapa 3 · Backend y Persistencia de Datos — ISW-306
+
+Sistema de registro y gestión de participantes con **Node.js + Express** y persistencia en **MySQL**.
+
+## 📋 Requisitos Cumplidos
+
+### 1. Entorno de Servidor ✅
+- **Lenguaje:** Node.js
+- **Framework:** Express.js
+- **Procesamiento:** Peticiones HTTP (GET, POST, PUT, DELETE)
+- **Validación:** Backend valida campos únicos y requeridos
+
+### 2. Base de Datos ✅
+- **Motor:** MySQL / MariaDB (libre)
+- **ORM:** Sequelize
+- **Operaciones CRUD:** Completas
+  - **C**reate: POST `/api/usuarios`
+  - **R**ead: GET `/api/usuarios` y GET `/api/usuarios/:id`
+  - **U**pdate: PUT `/api/usuarios/:id`
+  - **D**elete: DELETE `/api/usuarios/:id`
+- **Migraciones:** Sequelize CLI (opcional, incluidas)
+
+### 3. Integración API ✅
+- API REST conectada con frontend (Etapa 2)
+- Endpoints documentados
+- Manejo de errores y validaciones
+
+---
+
+## 🚀 Instalación
+
+### Requisitos Previos
+- Node.js 18+
+- MySQL 5.7+ o MariaDB
+- npm
+
+### Pasos
+
+**1. Clonar y entrar al directorio**
+```bash
+git clone <url>
+cd isw306-proyecto
+npm install
+```
+
+**2. Configurar variables de entorno**
+
+Fijarse en el archivo .example para ver la estructura del archivo .env
+Crea `.env` en la raíz:
+
+Usar migraciones Sequelize:
+```bash
+npx sequelize-cli db:migrate
+
+usar el script en el archivo package.json
+
+---
+
+## 🔄 Validaciones
+
+**Backend:**
+- ✅ Email único (UNIQUE constraint)
+- ✅ Matrícula única (UNIQUE constraint)
+- ✅ Campos requeridos no nulos
+- ✅ Manejo de errores SequelizeUniqueConstraintError
+
+**Frontend:**
+- ✅ Validación en tiempo real
+- ✅ Validación al enviar
+- ✅ Mensajes de error descriptivos
+
+---
+
+## 📊 Scripts Disponibles
+
+```bash
+npm start              # Inicia servidor
+npm run dev            # Inicia con nodemon
+npm run db:migrate     # Ejecuta migraciones
+npm run db:seed        # Carga datos iniciales (si existen)
+```
+
+## ✅ Checklist de Entrega
+
+- ✅ Código en rama `etapa-3/backend`
+- ✅ Script SQL en `/sql/schema.sql`
+- ✅ README con instrucciones
+- ✅ API REST funcional (CRUD completo)
+- ✅ Base de datos persistente
+- ✅ Validaciones backend
+- ✅ Errores capturados y manejados
+- ✅ Mínimo 3 commits en la rama
+- ✅ Pull Request hacia `main`
+
+---
+
+## 📚 Tecnologías
+
+- **Runtime:** Node.js 25.9.0
+- **Framework:** Express 4.x
+- **ORM:** Sequelize 6.x
+- **BD:** MySQL 8.x / MariaDB 10.x
+- **Validación:** Sequelize validators
+
+## 🎯 Flujo de Datos
+
+**Estado:** ✅ Etapa 3 Completada
+
+
+## 👤 Autor
+
+- **Nombre:** *JOSE ECHAVARRIA*
+- **Matrícula:** *100047768*
+- **Sección:** *ISW-306*
+- **Repositorio:** *https://github.com/notorious813/isw306-proyecto*

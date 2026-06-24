@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ISW-306 | Panel Principal</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="/css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
@@ -85,6 +85,20 @@
         </aside>
       </div>
     </section>
+
+<!-- USUARIOS REGISTRADOS -->
+<section class="usuarios-section" id="usuarios" aria-labelledby="usuarios-title">
+  <div class="container">
+    <header class="section-header">
+      <h2 id="usuarios-title">Participantes Registrados</h2>
+      <p>Listado de todos los usuarios registrados en el sistema.</p>
+    </header>
+
+    <div id="usuarios-tabla">
+      <p>Cargando usuarios...</p>
+    </div>
+  </div>
+</section>
 
     <!-- ETAPAS DEL PROYECTO -->
     <section class="etapas-section" id="etapas" aria-labelledby="etapas-title">
@@ -199,7 +213,8 @@
       <p class="footer-note">Cada etapa se entrega de forma acumulativa en su propia rama Git.</p>
     </div>
   </footer>
-
-  <script src="js/main.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/js/main.js"></script>
+  
 </body>
 </html>

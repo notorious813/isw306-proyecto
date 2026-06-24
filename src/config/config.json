@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "Locotrom200104.",
+    "database": "devweb",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "",
+    "password": null,
+    "database": "",
+    "host": "",
+    "dialect": ""
+  },
+  "production": {
+    "username": "",
+    "password": null,
+    "database": "",
+    "host": "",
+    "dialect": ""
+  }
+}
