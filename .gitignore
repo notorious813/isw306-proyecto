@@ -16,3 +16,9 @@ npm-debug.log*
 
 # Dependencias (para etapas futuras)
 node_modules/
+
+.vercel
+.env*
+
+# Configuración de Vercel
+.vercel/
