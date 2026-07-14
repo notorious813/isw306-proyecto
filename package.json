@@ -18,7 +18,7 @@
     "dev": "nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "sequelize:migration": "npx sequelize-cli db:migrate --config src/config/config.json",
-    "start": "node server.js"
+    "start": "node src/server.js"
   },
   "dependencies": {
     "dotenv": "^17.4.2",

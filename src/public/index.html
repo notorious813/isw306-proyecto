@@ -24,6 +24,7 @@
         <ul>
           <li><a href="index.html" class="nav-link active" aria-current="page">Dashboard</a></li>
           <li><a href="registro.html" class="nav-link">Registro</a></li>
+          <li><a href="login.html" class="nav-link">Iniciar sesión</a></li>
           <li><a href="#etapas" class="nav-link">Etapas</a></li>
           <li><a href="#recursos" class="nav-link">Recursos</a></li>
         </ul>
@@ -32,6 +33,19 @@
       <button class="hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav">
         <span></span><span></span><span></span>
       </button>
+
+      <aside id="admin-profile" class="header-profile" aria-label="Perfil de la sesión" hidden>
+        <div class="header-avatar" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <circle cx="32" cy="23" r="12"></circle>
+            <path d="M11 57c1.8-13 9-20 21-20s19.2 7 21 20"></path>
+          </svg>
+        </div>
+        <div class="header-profile-text">
+          <strong>Administrador Login</strong>
+          <button id="header-logout" type="button">Cerrar sesión</button>
+        </div>
+      </aside>
     </div>
 
     <!-- Mobile nav -->
@@ -39,6 +53,7 @@
       <ul>
         <li><a href="index.html" class="nav-link active">Dashboard</a></li>
         <li><a href="registro.html" class="nav-link">Registro</a></li>
+        <li><a href="login.html" class="nav-link">Iniciar sesión</a></li>
         <li><a href="#etapas" class="nav-link">Etapas</a></li>
         <li><a href="#recursos" class="nav-link">Recursos</a></li>
       </ul>
@@ -215,6 +230,7 @@
   </footer>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/js/main.js"></script>
+  <script src="/js/session-profile.js"></script>
   
 </body>
 </html>

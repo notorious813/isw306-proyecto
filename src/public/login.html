@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Acceso al portal ISW-306" />
+    <title>ISW-306 | Iniciar sesión</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <script src="/js/login.js" defer></script>
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="brand-panel" aria-label="Presentación">
+        <a class="brand" href="/" aria-label="Volver al inicio">ISW <span>· 306</span></a>
+        <div>
+          <p class="eyebrow">Portal académico</p>
+          <h1>Todo tu proyecto,<br /><em>en un solo lugar.</em></h1>
+          <p class="brand-copy">Accede a tu espacio para continuar desarrollando y gestionando tu proyecto integrador.</p>
+        </div>
+        <p class="copyright">© 2026 ISW-306</p>
+      </section>
+
+      <section class="form-panel">
+        <div id="login-view" class="card">
+          <p class="eyebrow accent">Bienvenido</p>
+          <h2>Inicia sesión</h2>
+          <p class="muted">Introduce tus datos para continuar.</p>
+
+          <form id="login-form" novalidate>
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" autocomplete="username" placeholder="nombre@correo.com" required />
+
+            <label for="password">Contraseña</label>
+            <div class="password-field">
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required />
+              <button id="toggle-password" class="text-button" type="button">Ver</button>
+            </div>
+
+            <p id="form-message" class="message" role="alert" aria-live="polite"></p>
+            <button id="submit-button" class="primary-button" type="submit">Entrar</button>
+          </form>
+
+          <div class="demo-box">
+            <strong>Cuenta de prueba</strong>
+            <span>admin@isw306.test</span>
+            <span>Cambiar123!</span>
+          </div>
+          <a class="back-link" href="/">← Volver a la página principal</a>
+        </div>
+
+        <div id="dashboard-view" class="session-view" hidden>
+          <aside class="admin-profile" aria-label="Perfil de la sesión">
+            <div class="admin-avatar" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="img">
+                <circle cx="32" cy="23" r="12"></circle>
+                <path d="M11 57c1.8-13 9-20 21-20s19.2 7 21 20"></path>
+              </svg>
+            </div>
+            <div class="admin-details">
+              <strong>Administrador Login</strong>
+              <button id="logout-button" class="logout-link" type="button">Cerrar sesión</button>
+            </div>
+          </aside>
+
+          <div class="card dashboard">
+            <div class="success-icon">✓</div>
+            <p class="eyebrow accent">Sesión activa</p>
+            <h2>Hola, <span id="user-name">Administrador</span></h2>
+            <p class="muted">Ingresaste correctamente con <strong id="user-email"></strong>.</p>
+            <a class="primary-button link-button" href="/">Ir al panel principal</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
