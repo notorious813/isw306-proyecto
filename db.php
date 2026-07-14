@@ -1,119 +1,81 @@
 <?php
-declare(strict_types=1);
+const DATA_FILE = __DIR__ . '/data/participants.json';
 
-function getDatabase(): PDO
+function ensureDataPath(): void
 {
-    $databaseDirectory = __DIR__ . '/data';
-    if (!is_dir($databaseDirectory)) {
-        mkdir($databaseDirectory, 0755, true);
+    if (!is_dir(__DIR__ . '/data')) {
+        mkdir(__DIR__ . '/data', 0755, true);
     }
 
-    $dbFile = $databaseDirectory . '/app.sqlite';
-    $pdo = new PDO('sqlite:' . $dbFile);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-    initDatabase($pdo);
-    return $pdo;
+    if (!file_exists(DATA_FILE)) {
+        file_put_contents(DATA_FILE, json_encode([]));
+    }
 }
 
-function initDatabase(PDO $pdo): void
+function loadParticipants(): array
 {
-    $pdo->exec(
-        'CREATE TABLE IF NOT EXISTS participants (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            apellido TEXT NOT NULL,
-            matricula TEXT NOT NULL UNIQUE,
-            correo TEXT NOT NULL,
-            seccion TEXT NOT NULL,
-            periodo TEXT NOT NULL,
-            repo_nombre TEXT NOT NULL,
-            repo_url TEXT NOT NULL,
-            plataforma TEXT NOT NULL,
-            privado INTEGER NOT NULL DEFAULT 0,
-            creado_en TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-        )'
-    );
+    ensureDataPath();
+    $content = file_get_contents(DATA_FILE);
+    $participants = json_decode($content ?: '[]', true);
+
+    return is_array($participants) ? $participants : [];
 }
 
-function fetchParticipants(PDO $pdo): array
+function saveParticipants(array $participants): bool
 {
-    $stmt = $pdo->query('SELECT * FROM participants ORDER BY creado_en DESC');
-    return $stmt->fetchAll();
+    ensureDataPath();
+    $data = json_encode(array_values($participants), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+    return false !== file_put_contents(DATA_FILE, $data, LOCK_EX);
 }
 
-function fetchParticipant(PDO $pdo, int $id): ?array
+function getParticipantById(string $id): ?array
 {
-    $stmt = $pdo->prepare('SELECT * FROM participants WHERE id = :id LIMIT 1');
-    $stmt->execute([':id' => $id]);
-    $participant = $stmt->fetch();
-    return $participant === false ? null : $participant;
+    $participants = loadParticipants();
+
+    foreach ($participants as $participant) {
+        if (isset($participant['id']) && $participant['id'] === $id) {
+            return $participant;
+        }
+    }
+
+    return null;
 }
 
-function createParticipant(PDO $pdo, array $data): int
+function addParticipant(array $participant): bool
 {
-    $stmt = $pdo->prepare(
-        'INSERT INTO participants (
-            nombre, apellido, matricula, correo, seccion, periodo,
-            repo_nombre, repo_url, plataforma, privado
-        ) VALUES (
-            :nombre, :apellido, :matricula, :correo, :seccion, :periodo,
-            :repo_nombre, :repo_url, :plataforma, :privado
-        )'
-    );
+    $participants = loadParticipants();
+    $participants[] = $participant;
 
-    $stmt->execute([
-        ':nombre' => $data['nombre'],
-        ':apellido' => $data['apellido'],
-        ':matricula' => $data['matricula'],
-        ':correo' => $data['correo'],
-        ':seccion' => $data['seccion'],
-        ':periodo' => $data['periodo'],
-        ':repo_nombre' => $data['repo_nombre'],
-        ':repo_url' => $data['repo_url'],
-        ':plataforma' => $data['plataforma'],
-        ':privado' => $data['privado'],
-    ]);
-
-    return (int)$pdo->lastInsertId();
+    return saveParticipants($participants);
 }
 
-function updateParticipant(PDO $pdo, int $id, array $data): bool
+function updateParticipant(string $id, array $data): bool
 {
-    $stmt = $pdo->prepare(
-        'UPDATE participants SET
-            nombre = :nombre,
-            apellido = :apellido,
-            matricula = :matricula,
-            correo = :correo,
-            seccion = :seccion,
-            periodo = :periodo,
-            repo_nombre = :repo_nombre,
-            repo_url = :repo_url,
-            plataforma = :plataforma,
-            privado = :privado
-        WHERE id = :id'
-    );
+    $participants = loadParticipants();
+    $updated = false;
 
-    return $stmt->execute([
-        ':nombre' => $data['nombre'],
-        ':apellido' => $data['apellido'],
-        ':matricula' => $data['matricula'],
-        ':correo' => $data['correo'],
-        ':seccion' => $data['seccion'],
-        ':periodo' => $data['periodo'],
-        ':repo_nombre' => $data['repo_nombre'],
-        ':repo_url' => $data['repo_url'],
-        ':plataforma' => $data['plataforma'],
-        ':privado' => $data['privado'],
-        ':id' => $id,
-    ]);
+    foreach ($participants as $index => $participant) {
+        if (isset($participant['id']) && $participant['id'] === $id) {
+            $participants[$index] = array_merge($participant, $data);
+            $updated = true;
+            break;
+        }
+    }
+
+    return $updated ? saveParticipants($participants) : false;
 }
 
-function deleteParticipant(PDO $pdo, int $id): bool
+function deleteParticipant(string $id): bool
 {
-    $stmt = $pdo->prepare('DELETE FROM participants WHERE id = :id');
-    return $stmt->execute([':id' => $id]);
+    $participants = loadParticipants();
+    $filtered = array_filter($participants, static function ($participant) use ($id) {
+        return !isset($participant['id']) || $participant['id'] !== $id;
+    });
+
+    if (count($filtered) === count($participants)) {
+        return false;
+    }
+
+    return saveParticipants(array_values($filtered));
 }

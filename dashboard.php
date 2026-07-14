@@ -1,69 +1,87 @@
 <?php
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireAuth();
 require_once __DIR__ . '/db.php';
 
-$pageTitle = 'Panel de registros';
-$pdo = getDatabase();
-$participants = fetchParticipants($pdo);
+$participants = loadParticipants();
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
 
-require_once __DIR__ . '/templates/header.php';
+$pageTitle = 'Dashboard | ISW-306';
+include __DIR__ . '/templates/header.php';
 ?>
-<div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-4">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
   <div>
-    <h1 class="h2 mb-1">Panel de participantes</h1>
-    <p class="text-muted mb-0">Gestiona los registros del proyecto con actualizaciones y eliminaciones seguras.</p>
+    <h1 class="h3 mb-1">Panel de Administración</h1>
+    <p class="text-muted mb-0">Gestiona los registros de participantes usando el ciclo CRUD completo.</p>
   </div>
-  <a href="registro.php" class="btn btn-primary">Nuevo registro</a>
+  <a href="registro.php" class="btn btn-orange">Agregar participante</a>
 </div>
 
-<div class="card shadow-sm">
-  <div class="card-body p-0">
-    <?php if (empty($participants)): ?>
-      <div class="p-5 text-center">
-        <h2 class="h5 mb-3">No hay registros aún</h2>
-        <p class="text-muted mb-3">Agrega el primer participante usando el formulario.</p>
-        <a href="registro.php" class="btn btn-secondary">Crear registro</a>
+<?php if ($flash): ?>
+  <div class="alert alert-success" role="alert"><?= htmlspecialchars($flash, ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h2 class="h5">Participantes registrados</h2>
+        <p class="display-5 mb-0"><?= count($participants) ?></p>
       </div>
-    <?php else: ?>
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="text-muted">
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h2 class="h5">Último registro</h2>
+        <p class="mb-0 text-muted"><?= count($participants) ? htmlspecialchars(end($participants)['fecha_registro'], ENT_QUOTES, 'UTF-8') : 'N/A' ?></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Matrícula</th>
+            <th>Correo</th>
+            <th>Repositorio</th>
+            <th>Visibilidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (empty($participants)): ?>
             <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Matrícula</th>
-              <th>Sección</th>
-              <th>Repositorio</th>
-              <th>Creado</th>
-              <th class="text-end">Acciones</th>
+              <td colspan="6" class="text-center text-muted py-4">No hay registros disponibles.</td>
             </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($participants as $user): ?>
+          <?php else: ?>
+            <?php foreach ($participants as $participant): ?>
               <tr>
-                <td><?= htmlspecialchars($user['id']) ?></td>
-                <td>
-                  <strong><?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?></strong>
-                  <div class="text-muted small"><?= htmlspecialchars($user['correo']) ?></div>
-                </td>
-                <td><?= htmlspecialchars($user['matricula']) ?></td>
-                <td><?= htmlspecialchars($user['seccion']) ?></td>
-                <td>
-                  <a href="<?= htmlspecialchars($user['repo_url']) ?>" target="_blank" rel="noreferrer noopener" class="link-primary"><?= htmlspecialchars($user['repo_nombre']) ?></a>
-                </td>
-                <td><?= htmlspecialchars($user['creado_en']) ?></td>
-                <td class="text-end">
-                  <a href="registro.php?id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-sm btn-outline-primary me-2">Editar</a>
-                  <a href="delete.php?id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Seguro que deseas eliminar este registro?');">Eliminar</a>
+                <td><?= htmlspecialchars($participant['nombre'] . ' ' . $participant['apellido'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?= htmlspecialchars($participant['matricula'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?= htmlspecialchars($participant['correo'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><a href="<?= htmlspecialchars($participant['repo_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer"><?= htmlspecialchars($participant['repo_nombre'], ENT_QUOTES, 'UTF-8') ?></a></td>
+                <td><?= htmlspecialchars($participant['privacidad'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td class="text-nowrap">
+                  <a href="edit.php?id=<?= urlencode($participant['id']) ?>" class="btn btn-sm btn-outline-primary">Editar</a>
+                  <form method="post" action="delete.php" class="d-inline-block ms-1">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($participant['id'], ENT_QUOTES, 'UTF-8') ?>">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar este registro?');">Eliminar</button>
+                  </form>
                 </td>
               </tr>
             <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-    <?php endif; ?>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<?php require_once __DIR__ . '/templates/footer.php';
+<?php include __DIR__ . '/templates/footer.php';

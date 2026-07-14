@@ -1,19 +1,14 @@
 <?php
-declare(strict_types=1);
-
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 function isLoggedIn(): bool
 {
     return !empty($_SESSION['user']);
 }
 
-function currentUser(): ?string
-{
-    return $_SESSION['user'] ?? null;
-}
-
-function requireLogin(): void
+function requireAuth(): void
 {
     if (!isLoggedIn()) {
         header('Location: login.php');
@@ -21,38 +16,29 @@ function requireLogin(): void
     }
 }
 
-function setFlash(string $message): void
+function authenticateUser(string $username, string $password): bool
 {
-    $_SESSION['flash'] = $message;
+    $validUser = 'admin';
+    $validPassword = 'ISW306!';
+
+    return $username === $validUser && $password === $validPassword;
 }
 
-function getFlash(): ?string
+function loginUser(string $username): void
 {
-    $flash = $_SESSION['flash'] ?? null;
-    unset($_SESSION['flash']);
-    return $flash;
-}
-
-function loginUser(string $username, string $password): bool
-{
-    $users = [
-        'admin' => password_hash('Proyecto2026!', PASSWORD_DEFAULT),
-    ];
-
-    if (!isset($users[$username])) {
-        return false;
-    }
-
-    if (!password_verify($password, $users[$username])) {
-        return false;
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
     }
 
     $_SESSION['user'] = $username;
-    return true;
 }
 
 function logoutUser(): void
 {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     $_SESSION = [];
 
     if (ini_get('session.use_cookies')) {
@@ -69,9 +55,4 @@ function logoutUser(): void
     }
 
     session_destroy();
-}
-
-function sanitizeValue(?string $value): string
-{
-    return trim($value ?? '');
 }

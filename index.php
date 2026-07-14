@@ -1,68 +1,90 @@
 <?php
-require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/db.php';
+
+$participants = loadParticipants();
+$participantCount = count($participants);
 $pageTitle = 'ISW-306 | Panel Principal';
-require_once __DIR__ . '/templates/header.php';
+include __DIR__ . '/templates/header.php';
 ?>
-<div class="row align-items-center gy-4">
-  <div class="col-lg-7">
-    <div class="p-4 p-md-5 bg-white rounded-4 shadow-sm">
-      <span class="badge bg-secondary mb-3">Proyecto Integrador · Etapa Final</span>
-      <h1 class="display-5 fw-bold page-title">Aplicación Web Profesional</h1>
-      <p class="lead text-muted">Sistema de registro académico con autentificación de sesión y gestión completa de registros usando Bootstrap.</p>
-      <div class="d-flex flex-column flex-sm-row gap-3">
-        <?php if (isLoggedIn()): ?>
-          <a href="dashboard.php" class="btn btn-primary btn-lg">Ir al panel</a>
-          <a href="registro.php" class="btn btn-outline-secondary btn-lg">Nuevo participante</a>
-        <?php else: ?>
-          <a href="login.php" class="btn btn-primary btn-lg">Iniciar sesión</a>
-          <a href="registro.php" class="btn btn-outline-secondary btn-lg">Crear cuenta de prueba</a>
-        <?php endif; ?>
+<div class="py-5 hero-banner rounded-4 shadow-sm text-white overflow-hidden">
+  <div class="row align-items-center">
+    <div class="col-lg-7">
+      <p class="badge bg-orange text-dark mb-3">Proyecto Integrador · Trimestre Actual</p>
+      <h1 class="display-5 fw-bold">Desarrollo de <em>Aplicación Web</em> Profesional</h1>
+      <p class="lead text-white-75">A lo largo del trimestre construirás de forma incremental una aplicación web funcional dividida en <strong>4 etapas</strong> con soporte de backend, CRUD y sesiones.</p>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="registro.php" class="btn btn-orange btn-lg">Registrar participante</a>
+        <a href="login.php" class="btn btn-outline-light btn-lg">Login administrativo</a>
       </div>
     </div>
-  </div>
-  <div class="col-lg-5">
-    <div class="card border-0 shadow-sm bg-soft-primary">
-      <div class="card-body">
-        <h2 class="h5 card-title">Criterios de evaluación</h2>
-        <ul class="list-group list-group-flush mt-3">
-          <li class="list-group-item">Uso de Bootstrap para estandarizar UI</li>
-          <li class="list-group-item">CRUD completo con creación, lectura, actualización y eliminación</li>
-          <li class="list-group-item">Autenticación segura con sesiones PHP</li>
-          <li class="list-group-item">Rutas privadas protegidas por login</li>
-        </ul>
+    <div class="col-lg-5 mt-4 mt-lg-0">
+      <div class="card bg-white bg-opacity-15 border-0 text-white shadow-sm p-4">
+        <h2 class="h5">Estado del proyecto</h2>
+        <p class="mb-3 text-white-75">Total de registros guardados en el sistema.</p>
+        <div class="d-flex align-items-center justify-content-between gap-3">
+          <div>
+            <p class="display-4 mb-0"><?= $participantCount ?></p>
+            <small class="text-white-50">participantes</small>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-white text-navy">Etapa 4</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <section class="mt-5">
-  <div class="row g-4">
-    <div class="col-md-6">
-      <div class="card h-100 shadow-sm">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+    <div class="col">
+      <article class="card h-100 shadow-sm">
         <div class="card-body">
-          <h3 class="h5">Etapas acumulativas</h3>
-          <p class="text-muted">Cada etapa se integra al flujo de trabajo final: interfaz, lógica, backend y despliegue.</p>
-          <div class="d-flex flex-wrap gap-2">
-            <span class="badge bg-primary">Maquetación</span>
-            <span class="badge bg-primary">Interactividad</span>
-            <span class="badge bg-primary">Backend</span>
-            <span class="badge bg-primary">Entrega final</span>
-          </div>
+          <h3 class="h5">Etapa 1 · Maquetación</h3>
+          <p class="text-muted">HTML5 semántico, CSS externo y diseño responsive para la base visual del proyecto.</p>
         </div>
-      </div>
+      </article>
     </div>
-    <div class="col-md-6">
-      <div class="card h-100 shadow-sm">
+    <div class="col">
+      <article class="card h-100 shadow-sm">
         <div class="card-body">
-          <h3 class="h5">Acceso rápido</h3>
-          <ul class="list-unstyled mb-0">
-            <li class="mb-2"><strong>Usuario:</strong> admin</li>
-            <li><strong>Contraseña:</strong> Proyecto2026!</li>
-          </ul>
+          <h3 class="h5">Etapa 2 · Interactividad</h3>
+          <p class="text-muted">JavaScript para validación, navegación y comportamiento del formulario.</p>
         </div>
-      </div>
+      </article>
+    </div>
+    <div class="col">
+      <article class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h3 class="h5">Etapa 3 · Backend</h3>
+          <p class="text-muted">Servidor con PHP, almacenamiento local y procesamiento de datos.</p>
+        </div>
+      </article>
+    </div>
+    <div class="col">
+      <article class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h3 class="h5">Etapa 4 · Profesionalización</h3>
+          <p class="text-muted">Framework CSS, autenticación de sesiones y ciclo CRUD completo.</p>
+        </div>
+      </article>
     </div>
   </div>
 </section>
 
-<?php require_once __DIR__ . '/templates/footer.php';
+<section class="mt-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title">Criterios de la entrega final</h2>
+      <p class="text-muted">La versión final integra frontend estandarizado con Bootstrap, login seguro y administración de registros.</p>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Uso efectivo de un framework CSS</li>
+        <li class="list-group-item">Autenticación con sesiones PHP</li>
+        <li class="list-group-item">CRUD completo: crear, leer, actualizar y eliminar</li>
+        <li class="list-group-item">Código limpio y sin errores en consola</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<?php include __DIR__ . '/templates/footer.php';

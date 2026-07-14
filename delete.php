@@ -1,20 +1,15 @@
 <?php
 require_once __DIR__ . '/auth.php';
-requireLogin();
+requireAuth();
 require_once __DIR__ . '/db.php';
 
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-if ($id === false || $id === null) {
-    setFlash('Identificador inválido.');
-    header('Location: dashboard.php');
-    exit;
-}
-
-$pdo = getDatabase();
-if (deleteParticipant($pdo, $id)) {
-    setFlash('Registro eliminado.');
-} else {
-    setFlash('No se encontró el registro para eliminar.');
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
+    $id = trim($_POST['id']);
+    if (deleteParticipant($id)) {
+        $_SESSION['flash'] = 'El registro fue eliminado correctamente.';
+    } else {
+        $_SESSION['flash'] = 'No fue posible eliminar el registro.';
+    }
 }
 
 header('Location: dashboard.php');

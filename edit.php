@@ -1,31 +1,41 @@
 <?php
+require_once __DIR__ . '/auth.php';
+requireAuth();
 require_once __DIR__ . '/db.php';
 
+$id = trim($_GET['id'] ?? '');
+$participant = getParticipantById($id);
+
+if (!$participant) {
+    header('Location: dashboard.php');
+    exit;
+}
+
 $errors = [];
-$success = false;
 $values = [
-    'nombre' => '',
-    'apellido' => '',
-    'matricula' => '',
-    'correo' => '',
-    'seccion' => '',
-    'periodo' => '',
-    'repo-nombre' => '',
-    'repo-url' => '',
-    'plataforma' => 'github',
-    'privacidad' => '',
-    'acepta-terminos' => '',
+    'nombre' => $participant['nombre'],
+    'apellido' => $participant['apellido'],
+    'matricula' => $participant['matricula'],
+    'correo' => $participant['correo'],
+    'seccion' => $participant['seccion'],
+    'periodo' => $participant['periodo'],
+    'repo-nombre' => $participant['repo_nombre'],
+    'repo-url' => $participant['repo_url'],
+    'plataforma' => $participant['plataforma'],
+    'privacidad' => $participant['privacidad'] === 'Privado' ? 'Privado' : 'Público',
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    foreach ($values as $key => $value) {
-        if ($key === 'privacidad') {
-            $values[$key] = isset($_POST[$key]) ? 'Privado' : 'Público';
-            continue;
-        }
-
-        $values[$key] = trim($_POST[$key] ?? '');
-    }
+    $values['nombre'] = trim($_POST['nombre'] ?? '');
+    $values['apellido'] = trim($_POST['apellido'] ?? '');
+    $values['matricula'] = trim($_POST['matricula'] ?? '');
+    $values['correo'] = trim($_POST['correo'] ?? '');
+    $values['seccion'] = trim($_POST['seccion'] ?? '');
+    $values['periodo'] = trim($_POST['periodo'] ?? '');
+    $values['repo-nombre'] = trim($_POST['repo-nombre'] ?? '');
+    $values['repo-url'] = trim($_POST['repo-url'] ?? '');
+    $values['plataforma'] = trim($_POST['plataforma'] ?? 'github');
+    $values['privacidad'] = isset($_POST['privacidad']) ? 'Privado' : 'Público';
 
     if ($values['nombre'] === '') {
         $errors['nombre'] = 'El nombre es obligatorio.';
@@ -59,13 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['repo-url'] = 'Ingresa una URL válida (ej. https://github.com/...).';
     }
 
-    if (!isset($_POST['acepta-terminos'])) {
-        $errors['acepta-terminos'] = 'Debes confirmar antes de enviar.';
-    }
-
     if (empty($errors)) {
-        $record = [
-            'id' => uniqid('p', true),
+        updateParticipant($id, [
             'nombre' => $values['nombre'],
             'apellido' => $values['apellido'],
             'matricula' => $values['matricula'],
@@ -76,106 +81,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'repo_url' => $values['repo-url'],
             'plataforma' => $values['plataforma'],
             'privacidad' => $values['privacidad'],
-            'fecha_registro' => date('Y-m-d H:i:s'),
-        ];
+        ]);
 
-        addParticipant($record);
-        $success = true;
-        $values = [
-            'nombre' => '',
-            'apellido' => '',
-            'matricula' => '',
-            'correo' => '',
-            'seccion' => '',
-            'periodo' => '',
-            'repo-nombre' => '',
-            'repo-url' => '',
-            'plataforma' => 'github',
-            'privacidad' => '',
-            'acepta-terminos' => '',
-        ];
+        $_SESSION['flash'] = 'El registro se actualizó correctamente.';
+        header('Location: dashboard.php');
+        exit;
     }
 }
 
-$pageTitle = 'Registro de Participante | ISW-306';
+$pageTitle = 'Editar participante | ISW-306';
 include __DIR__ . '/templates/header.php';
 ?>
-<div class="row gx-5 gy-4">
-  <div class="col-lg-5">
+<div class="row justify-content-center">
+  <div class="col-lg-8">
     <div class="card shadow-sm border-0">
       <div class="card-body">
-        <span class="badge bg-orange text-dark mb-3">Etapa 1 · Maquetación</span>
-        <h1 class="h3">Registro de <em>Participante</em></h1>
-        <p class="text-muted">Completa el formulario para inscribir tus datos en el proyecto. La información será utilizada para el seguimiento académico durante el trimestre.</p>
-
-        <div class="mt-4">
-          <div class="d-flex gap-3 align-items-start mb-3">
-            <span class="fs-4 text-orange">◈</span>
-            <div>
-              <strong>Datos personales</strong>
-              <p class="mb-0 text-muted">Nombre completo, correo institucional y número de matrícula.</p>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h1 class="h4 mb-1">Editar participante</h1>
+            <p class="text-muted mb-0">Actualiza los datos del registro seleccionado.</p>
           </div>
-          <div class="d-flex gap-3 align-items-start mb-3">
-            <span class="fs-4 text-orange">◈</span>
-            <div>
-              <strong>Datos del proyecto</strong>
-              <p class="mb-0 text-muted">Nombre de tu repositorio Git y URL del mismo.</p>
-            </div>
-          </div>
-          <div class="d-flex gap-3 align-items-start">
-            <span class="fs-4 text-orange">◈</span>
-            <div>
-              <strong>Confirmación</strong>
-              <p class="mb-0 text-muted">Recibirás confirmación una vez el profesor revise tu Pull Request.</p>
-            </div>
-          </div>
+          <a href="dashboard.php" class="btn btn-outline-secondary">Volver</a>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-lg-7">
-    <div class="card shadow-sm border-0">
-      <div class="card-body">
-        <h2 class="h5 mb-3">Datos del participante</h2>
-
-        <?php if ($success): ?>
-          <div class="alert alert-success" role="alert">
-            <strong>¡Registro enviado!</strong> Tus datos se guardaron correctamente.
-          </div>
-        <?php endif; ?>
 
         <form method="post" novalidate>
           <div class="row g-3">
             <div class="col-md-6">
-              <label for="nombre" class="form-label">Nombre <span class="text-orange">*</span></label>
+              <label for="nombre" class="form-label">Nombre</label>
               <input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($values['nombre'], ENT_QUOTES, 'UTF-8') ?>" class="form-control<?= isset($errors['nombre']) ? ' is-invalid' : '' ?>" required>
               <div class="invalid-feedback"><?= $errors['nombre'] ?? '' ?></div>
             </div>
             <div class="col-md-6">
-              <label for="apellido" class="form-label">Apellido <span class="text-orange">*</span></label>
+              <label for="apellido" class="form-label">Apellido</label>
               <input type="text" id="apellido" name="apellido" value="<?= htmlspecialchars($values['apellido'], ENT_QUOTES, 'UTF-8') ?>" class="form-control<?= isset($errors['apellido']) ? ' is-invalid' : '' ?>" required>
               <div class="invalid-feedback"><?= $errors['apellido'] ?? '' ?></div>
             </div>
           </div>
 
           <div class="mb-3 mt-3">
-            <label for="matricula" class="form-label">Número de matrícula <span class="text-orange">*</span></label>
-            <input type="text" id="matricula" name="matricula" value="<?= htmlspecialchars($values['matricula'], ENT_QUOTES, 'UTF-8') ?>" placeholder="2023-0001" class="form-control<?= isset($errors['matricula']) ? ' is-invalid' : '' ?>" required>
-            <div class="form-text">Formato: AAAA-NNNN</div>
+            <label for="matricula" class="form-label">Matrícula</label>
+            <input type="text" id="matricula" name="matricula" value="<?= htmlspecialchars($values['matricula'], ENT_QUOTES, 'UTF-8') ?>" class="form-control<?= isset($errors['matricula']) ? ' is-invalid' : '' ?>" required>
             <div class="invalid-feedback"><?= $errors['matricula'] ?? '' ?></div>
           </div>
 
           <div class="mb-3">
-            <label for="correo" class="form-label">Correo institucional <span class="text-orange">*</span></label>
-            <input type="email" id="correo" name="correo" value="<?= htmlspecialchars($values['correo'], ENT_QUOTES, 'UTF-8') ?>" placeholder="usuario@institucion.edu" class="form-control<?= isset($errors['correo']) ? ' is-invalid' : '' ?>" required>
+            <label for="correo" class="form-label">Correo institucional</label>
+            <input type="email" id="correo" name="correo" value="<?= htmlspecialchars($values['correo'], ENT_QUOTES, 'UTF-8') ?>" class="form-control<?= isset($errors['correo']) ? ' is-invalid' : '' ?>" required>
             <div class="invalid-feedback"><?= $errors['correo'] ?? '' ?></div>
           </div>
 
           <div class="row g-3">
             <div class="col-md-6">
-              <label for="seccion" class="form-label">Sección <span class="text-orange">*</span></label>
+              <label for="seccion" class="form-label">Sección</label>
               <select id="seccion" name="seccion" class="form-select<?= isset($errors['seccion']) ? ' is-invalid' : '' ?>" required>
                 <option value="" disabled <?= $values['seccion'] === '' ? 'selected' : '' ?>>Selecciona…</option>
                 <option value="01" <?= $values['seccion'] === '01' ? 'selected' : '' ?>>Sección 01</option>
@@ -186,7 +143,7 @@ include __DIR__ . '/templates/header.php';
               <div class="invalid-feedback"><?= $errors['seccion'] ?? '' ?></div>
             </div>
             <div class="col-md-6">
-              <label for="periodo" class="form-label">Período académico <span class="text-orange">*</span></label>
+              <label for="periodo" class="form-label">Período académico</label>
               <select id="periodo" name="periodo" class="form-select<?= isset($errors['periodo']) ? ' is-invalid' : '' ?>" required>
                 <option value="" disabled <?= $values['periodo'] === '' ? 'selected' : '' ?>>Selecciona…</option>
                 <option value="2025-1" <?= $values['periodo'] === '2025-1' ? 'selected' : '' ?>>2025 — Trimestre I</option>
@@ -198,17 +155,13 @@ include __DIR__ . '/templates/header.php';
           </div>
 
           <hr class="my-4">
-          <h5 class="mb-3">Datos del repositorio</h5>
-
           <div class="mb-3">
-            <label for="repo-nombre" class="form-label">Nombre del repositorio <span class="text-orange">*</span></label>
+            <label for="repo-nombre" class="form-label">Nombre del repositorio</label>
             <input type="text" id="repo-nombre" name="repo-nombre" value="<?= htmlspecialchars($values['repo-nombre'], ENT_QUOTES, 'UTF-8') ?>" class="form-control<?= isset($errors['repo-nombre']) ? ' is-invalid' : '' ?>" required>
-            <div class="form-text">Solo letras minúsculas, números y guiones.</div>
             <div class="invalid-feedback"><?= $errors['repo-nombre'] ?? '' ?></div>
           </div>
-
           <div class="mb-3">
-            <label for="repo-url" class="form-label">URL del repositorio <span class="text-orange">*</span></label>
+            <label for="repo-url" class="form-label">URL del repositorio</label>
             <input type="url" id="repo-url" name="repo-url" value="<?= htmlspecialchars($values['repo-url'], ENT_QUOTES, 'UTF-8') ?>" class="form-control<?= isset($errors['repo-url']) ? ' is-invalid' : '' ?>" required>
             <div class="invalid-feedback"><?= $errors['repo-url'] ?? '' ?></div>
           </div>
@@ -226,19 +179,9 @@ include __DIR__ . '/templates/header.php';
           <div class="mb-4 form-check form-switch">
             <input class="form-check-input" type="checkbox" id="privacidad" name="privacidad" <?= $values['privacidad'] === 'Privado' ? 'checked' : '' ?> />
             <label class="form-check-label" for="privacidad">Repositorio privado</label>
-            <p class="form-text">Si es privado, recuerda agregar al profesor como colaborador con rol <em>Viewer</em>.</p>
           </div>
 
-          <div class="mb-3 form-check">
-            <input class="form-check-input<?= isset($errors['acepta-terminos']) ? ' is-invalid' : '' ?>" type="checkbox" id="acepta-terminos" name="acepta-terminos" value="1" <?= isset($_POST['acepta-terminos']) ? 'checked' : '' ?> />
-            <label class="form-check-label" for="acepta-terminos">Confirmo que el código es de mi autoría y cumple los requisitos.</label>
-            <div class="invalid-feedback"><?= $errors['acepta-terminos'] ?? '' ?></div>
-          </div>
-
-          <div class="d-flex gap-2 flex-wrap">
-            <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
-            <button type="submit" class="btn btn-orange">Enviar registro</button>
-          </div>
+          <button type="submit" class="btn btn-orange">Actualizar registro</button>
         </form>
       </div>
     </div>

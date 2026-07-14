@@ -15,12 +15,25 @@ A lo largo del trimestre se construye de forma incremental una aplicación web f
 
 ```
 isw306-proyecto/
-├── index.html        # Home / Dashboard principal
-├── registro.html     # Formulario de registro de participante
+├── index.php         # Home / Dashboard principal (Bootstrap + PHP)
+├── registro.php      # Formulario de registro público
+├── dashboard.php     # Panel protegido para administrar registros
+├── login.php         # Página de inicio de sesión
+├── logout.php        # Cierre de sesión
+├── edit.php          # Edición de registros existentes
+├── delete.php        # Eliminación de registros (POST)
+├── auth.php          # Comprobación de sesiones y autenticación básica
+├── db.php            # Lectura/escritura de datos en JSON
 ├── css/
-│   └── styles.css    # Hoja de estilos externa (colores institucionales)
+│   ├── styles.css    # Estilos del diseño original
+│   └── theme.css     # Estilos adicionales para Bootstrap y esquema institucional
+├── data/
+│   └── participants.json  # Base de datos local de registros
 ├── js/
-│   └── main.js       # Interacciones: menú, validación de formulario
+│   └── main.js       # Interacciones de menú y validación
+├── templates/
+│   ├── header.php    # Cabecera compartida con Bootstrap
+│   └── footer.php    # Pie de página compartido
 └── README.md
 ```
 
@@ -86,21 +99,21 @@ git checkout main
 git checkout -b etapa-1/maquetacion
 ```
 
-## 🛠️ Backend y autenticación
+## ▶️ Ejecutar la aplicación localmente
 
-La entrega final integra un backend PHP con sesiones y un CRUD completo.
+Este proyecto usa PHP y lecturas/escrituras en JSON. Para ejecutar localmente:
 
-- Punto de entrada: `index.php`
-- Login: `login.php`
-- Panel protegido: `dashboard.php`
-- Registro y edición: `registro.php`
-- Eliminación: `delete.php`
-- Cerrar sesión: `logout.php`
+```bash
+cd isw306-proyecto
+php -S localhost:8000
+```
 
-Credenciales de prueba:
+Luego abre `http://localhost:8000/index.php` en el navegador.
+
+## 🔐 Credenciales de acceso
 
 - Usuario: `admin`
-- Contraseña: `Proyecto2026!`
+- Contraseña: `ISW306!`
 
 ---
 
