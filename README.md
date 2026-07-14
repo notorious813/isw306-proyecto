@@ -86,6 +86,22 @@ git checkout main
 git checkout -b etapa-1/maquetacion
 ```
 
+## 🛠️ Backend y autenticación
+
+La entrega final integra un backend PHP con sesiones y un CRUD completo.
+
+- Punto de entrada: `index.php`
+- Login: `login.php`
+- Panel protegido: `dashboard.php`
+- Registro y edición: `registro.php`
+- Eliminación: `delete.php`
+- Cerrar sesión: `logout.php`
+
+Credenciales de prueba:
+
+- Usuario: `admin`
+- Contraseña: `Proyecto2026!`
+
 ---
 
 ## 📤 Flujo de entrega por etapa

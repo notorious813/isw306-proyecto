@@ -1,0 +1,53 @@
+/* ISW-306 · Tema Bootstrap personalizado */
+:root {
+  color-scheme: dark;
+  --bs-body-color: #1c2340;
+  --bs-body-bg: #f4f6fb;
+  --bs-primary: #0b1838;
+  --bs-secondary: #f68121;
+}
+
+body {
+  background-color: #f4f6fb;
+  color: #1c2340;
+}
+
+.navbar.bg-dark {
+  background-color: #0b1838 !important;
+}
+
+.page-title {
+  font-weight: 700;
+}
+
+.card-title {
+  color: #0b1838;
+}
+
+.btn-primary {
+  background-color: #f68121;
+  border-color: #f68121;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #d96c10;
+  border-color: #d96c10;
+}
+
+.bg-soft-primary {
+  background-color: rgba(246, 129, 33, 0.08);
+}
+
+.form-control:focus {
+  border-color: #f68121;
+  box-shadow: 0 0 0 0.2rem rgba(246, 129, 33, 0.25);
+}
+
+.table thead {
+  background-color: rgba(11, 24, 56, 0.08);
+}
+
+.text-muted {
+  color: #5a6378 !important;
+}
